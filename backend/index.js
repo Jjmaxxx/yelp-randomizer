@@ -13,7 +13,7 @@ app.post("/message", (req, res) => {
   console.log("latitude: " + req.body.latitude);
   console.log("longitude: " + req.body.longitude);
   (async()=>{
-    let businesses = await search(req.body.latitude,req.body.longitude,"",1000,5);
+    let businesses = await search(req.body.latitude,req.body.longitude,"",1000,6);
     res.json({ businesses: businesses });
   })();
 });

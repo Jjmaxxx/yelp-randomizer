@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+@font-face {
+  font-family: 'poppins';
+  src: local('poppins'), url(./fonts/Poppins-SemiBold.ttf ) format('truetype');
+}

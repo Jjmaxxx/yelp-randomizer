@@ -40,7 +40,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <AppBar style={{height:"72px",width:"100%"}}color="primary">
+      <AppBar style={{height:"72px",width:"100%"}}color="primary" position="sticky">
         <Toolbar sx={style.toolBar}>
             <img style={{height:"70%"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
         </Toolbar>

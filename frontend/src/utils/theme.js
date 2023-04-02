@@ -1,7 +1,25 @@
 import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
     components:{
-
+        MuiButton: {
+            styleOverrides: {
+              root: {
+                backgroundColor:"red",
+                color:"white",
+                fontSize:"20px",
+                fontWeight:"1000 ",
+                "&:hover": {
+                  color: "#white",
+                  backgroundColor:"red"
+                },
+              }
+            }
+          }
+    },
+    typography: {
+        button: {
+          textTransform: 'none'
+        }
     },
     palette: {
         primary: {
