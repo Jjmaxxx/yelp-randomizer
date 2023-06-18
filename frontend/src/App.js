@@ -1,5 +1,6 @@
 import React from "react";
-import FrontPage from "./frontPage.js";
+import FrontPage from "./FrontPage.js";
+import Form from "./Form.js"
 import { useState, useEffect } from 'react';
 import theme from './utils/theme.js';
 import { ThemeProvider } from "@mui/material/styles";
@@ -11,6 +12,7 @@ function App() {
   const style = styles;
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
+  const [page, setPage] = useState("FrontPage")
   const [businessPictures, setBusinessPictures] = useState(null);
   const updateDimensions = () => {
     setWidth(window.innerWidth);
@@ -29,13 +31,15 @@ function App() {
         body: JSON.stringify({latitude:latitude,longitude:longitude})
       })
       .then((res) => res.json())
-      .then((data) => {setBusinessPictures(data.businesses);console.log(data.businesses)});
-      // work with this information however you'd like!
+      .then((data) => {setBusinessPictures(data.businesses)});
     });
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
-
+  
+  function changePage(page){
+    setPage(page)
+  }
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -45,7 +49,14 @@ function App() {
             <img style={{height:"70%"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
         </Toolbar>
       </AppBar>
-      <FrontPage windowwidth={width} windowheight={height} pictures = {businessPictures}/>
+      {
+        page ==="FrontPage" &&
+          <FrontPage windowwidth={width} windowheight={height} pictures = {businessPictures} changePage ={changePage}/>
+        }
+      {
+        page ==="Form" &&
+          <Form windowwidth={width} windowheight={height}/>
+      }
       </ThemeProvider>
     </div>
   );
