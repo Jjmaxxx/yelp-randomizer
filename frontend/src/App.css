@@ -40,3 +40,80 @@
   font-family: 'poppins';
   src: local('poppins'), url(./fonts/Poppins-SemiBold.ttf ) format('truetype');
 }
+h1,p {
+  font-family:poppins
+}
+.formPage{
+  height:100%;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+}
+.formCategories{
+  display:flex;
+  flex-direction: column;
+  width:100%;
+}
+.formCategoriesTags{
+  display:flex;
+  margin-left: 25px;
+}
+.formTags{
+  display:flex;
+  justify-content: space-around;
+  gap:10px;
+  align-items:center;
+}
+.tag{
+  font-size: 20px;
+  border-radius: 20px;
+  border: 1px rgb(210, 200, 200) solid;
+  padding: 5px
+}
+.tag:hover{
+  background: rgb(210, 200, 200);
+  text-decoration:line-through;
+  text-decoration-thickness: 2px;
+  user-select: none;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.formAttributes{
+  height:100%;
+  width:100%
+}
+.formCategoriesSelections{
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  gap:75px;
+}
+.category{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial;
+  font-size: 20px; 
+  padding-bottom:5px;
+  user-select: none;
+  
+}
+.categoryMenu{
+  display:flex;
+}
+.categoryColumn{
+  width:100%;
+}
+/* .menuItem{
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content: space-between;
+} */
+
+/* .category:hover{
+  text-decoration: underline solid red;
+  text-underline-offset: 8px;
+} */
