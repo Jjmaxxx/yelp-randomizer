@@ -30,7 +30,7 @@ function Form(props){
     const categoryOpen = Boolean(categoryMenu);
     const foodOpen = Boolean(foodMenu);
     useEffect(()=>{
-        console.log("form page")
+        console.log("form")
     });
     const categoryMenuOpen = (event)=>{
         setCategoryMenu(event.currentTarget);
