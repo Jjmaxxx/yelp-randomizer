@@ -59,6 +59,7 @@ h1,p {
 .formCategoriesTags{
   display:flex;
   margin-left: 25px;
+  flex-wrap:wrap
 }
 .formTags{
   display:flex;
@@ -89,16 +90,19 @@ h1,p {
   align-items:center;
   justify-content: center;
   gap:75px;
+  flex-wrap:wrap
 }
 .category{
   display:flex;
   justify-content: center;
   align-items: center;
-  font-family: Arial;
-  font-size: 20px; 
-  padding-bottom:5px;
+  font-family: poppins;
+  font-size: 25px; 
   user-select: none;
-  
+  /* border: 1px solid red; */
+  margin-top: 15px;
+  border-radius: 5px;
+  padding:8px;
 }
 .categoryMenu{
   display:flex;

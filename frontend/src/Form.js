@@ -1,8 +1,11 @@
 import React from 'react';
 import './App.css';
-import { MenuItem, Menu, Typography, TextField, Divider } from '@mui/material';
+import { MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox } from '@mui/material';
+import { ThemeProvider } from "@mui/material/styles";
+import theme from './utils/theme.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';import { useState, useEffect } from 'react';
 import TakeoutDiningIcon from '@mui/icons-material/TakeoutDining';
+import BentoIcon from '@mui/icons-material/Bento';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
 import TapasIcon from '@mui/icons-material/Tapas';
 import KebabDiningIcon from '@mui/icons-material/KebabDining';
@@ -10,10 +13,22 @@ import RiceBowlIcon from '@mui/icons-material/RiceBowl';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import LocalPizzaIcon from '@mui/icons-material/LocalPizza';
+import LunchDiningIcon from '@mui/icons-material/LunchDining';
+import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
+import IcecreamIcon from '@mui/icons-material/Icecream';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
+import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
+import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
+import CakeIcon from '@mui/icons-material/Cake';
 function Form(props){
+    const [inputText,setInputText] = React.useState("");
     const [categoryMenu,setCategoryMenu] = React.useState(null);
+    const [foodMenu,setFoodMenu] = React.useState(null);
     const [tags,setTags] = React.useState([]);
     const categoryOpen = Boolean(categoryMenu);
+    const foodOpen = Boolean(foodMenu);
     useEffect(()=>{
         console.log("form page")
     });
@@ -23,6 +38,20 @@ function Form(props){
     const categoryMenuClose=(event)=>{
         setCategoryMenu(null);
     }
+    const foodMenuOpen = (event)=>{
+        setFoodMenu(event.currentTarget);
+    }
+    const foodMenuClose=(event)=>{
+        setFoodMenu(null);
+    }
+    const inputTag = (event) =>{
+        console.log(event);
+        if(event.key === "Enter"){
+            addTag(event.target.value);
+            setInputText("");
+        }
+    }
+
     const addTag = (tag)=>{
         if(!tags.includes(tag)){
             let newArray = [...tags,tag];
@@ -38,6 +67,8 @@ function Form(props){
     }
     return(
         <div className='Home' style={{width:props.windowwidth,height:props.windowheight}}>
+            <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <div className="formPage">
                 <div className="formCategories">
                     <div className="formCategoriesTags">
@@ -52,7 +83,7 @@ function Form(props){
                             }
                         </div>
                     </div>
-                    <Divider/>
+                    <Divider style={{marginBottom:"5px"}}/>
                     <div className="formCategoriesSelections">
                         
                         <div className="category" onClick = {categoryMenuOpen }onMouseOver={categoryMenuOpen}>
@@ -75,7 +106,7 @@ function Form(props){
                                         </Typography>
                                     </MenuItem>
                                     <MenuItem onClick={()=>{addTag("Japanese")}}>
-                                        <RamenDiningIcon style={{marginRight:"3px"}}/>
+                                        <BentoIcon style={{marginRight:"3px"}}/>
                                         <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
                                             Japanese
                                         </Typography>
@@ -121,14 +152,91 @@ function Form(props){
                                 </div>
                             </div>
                         </Menu>
-                        <div className="category">
+                        <div className="category" onClick = {foodMenuOpen }onMouseOver={foodMenuOpen}>
                             Foods
                             <KeyboardArrowDownIcon/>
                         </div>
+                        <Menu
+                            anchorEl={foodMenu}
+                            open={foodOpen}
+                            onClose={foodMenuClose}
+                            onMouseLeave={foodMenuClose}
+                            MenuListProps={{ onMouseLeave: foodMenuClose }}
+                        >
+                            <div className = "categoryMenu" onClick={foodMenuClose} style={{width:"280px"}}>
+                                <div className = "categoryColumn">
+                                    <MenuItem onClick={()=>{addTag("Noodles")}}>
+                                        <RamenDiningIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Noodles
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={()=>{addTag("Pizza")}}>
+                                        <LocalPizzaIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Pizza
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={()=>{addTag("Burger")}}>
+                                        <LunchDiningIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Burger
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={()=>{addTag("Coffee")}}>
+                                        <LocalCafeIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Coffee
+                                        </Typography>
+                                    </MenuItem>
+                                </div>
+                                <div className = "categoryColumn">
+                                    <MenuItem onClick={()=>{addTag("Ice Cream")}}>
+                                        <IcecreamIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Ice Cream
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={()=>{addTag("Cake")}}>
+                                        <CakeIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Cake
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={()=>{addTag("Tea")}}>
+                                        <EmojiFoodBeverageIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Tea
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={()=>{addTag("Soup")}}>
+                                    <SoupKitchenIcon style={{marginRight:"3px"}}/>
+                                        <Typography style={{fontFamily:"poppins",fontSize:"16px"}}>
+                                            Soup
+                                        </Typography>
+                                    </MenuItem>
+                                </div>
+                            </div>
+                        </Menu>
                         <TextField 
-                            style={{marginBottom:"20px"}}
                             label="Input Custom Tag" 
                             variant="standard" 
+                            color="primary"
+                            value ={inputText}
+                            onChange = {(e)=>(setInputText(e.target.value))}
+                            onKeyDown = {inputTag}
+                            placeholder="e.g. lunch, cafes, waffles"
+                            inputProps={{style: {fontFamily:"poppins", width:"200px"}}}
+                        />
+                        <Checkbox 
+                            icon={<ShuffleIcon />}
+                            checkedIcon={<ShuffleOnIcon />} 
+                            color="secondary"
+                            disableRipple
+                            style={{
+                                transform: "scale(1.5)",
+                                marginTop:"20px"
+                            }}
                         />
                         {/* <p>Foods</p>
                         <p>Input Custom</p> */}
@@ -138,6 +246,7 @@ function Form(props){
 
                 </div>
             </div>
+            </ThemeProvider>
         </div>
     )
 }

@@ -22,7 +22,68 @@ const theme = createTheme({
           },
         },
       },
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            color: 'black',
+          }
+        }
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            color:"black",
+            "&.Mui-focused": {
+              color:"red",
+            }
+          }
+        }
+        
+      },
+      // MuiOutlinedInput: {
+      //   styleOverrides: {
+      //     root: {
+      //       "& .MuiSvgIcon-root": {
+      //         color: "black",
+      //       },
+      //       "& .MuiOutlinedInput-notchedOutline": {
+      //         border: `1px solid red`,
+      //       },
+      //       "&.Mui-focused": {
+      //         "& .MuiOutlinedInput-notchedOutline": {
+      //           border: `1px solid black`,
+      //           color:'red'
+      //         }
+      //       }
+      //     }
+      //   }
+      //},
+      MuiInput: {
+        styleOverrides: {
+          // props:{
+          //   inputProps: { spellCheck: 'false' }
+          // },
+          underline: {
+            borderBottomColor: `black`,
+            '&:after': {
+              borderBottomColor: `black`,
+            },
+            '&$focused:after': {
+              borderBottomColor: `black`,
+            },
+            '&:before': {
+              borderBottomColor: `black`,
+            },
+            "&:hover": {
+              // color: "white",
+              // backgroundColor:"red"
+              borderBottomColor:"black",
+            },
+          }
+        }
+      }
     },
+
     // MuiButtonBase: {
     //   styleOverrides: {
     //     root: {
@@ -39,16 +100,16 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#FFFFFF',
-            light:'#FFFFFF',
-            dark:"#000000",
-            contrastText: '#0C7B93',
+          main: '#FFFFFF',
+          light:'#d2c8c8',
+          dark:"#000000",
+          contrastText: '#0C7B93',
         },
         secondary: {
-            main: '#00A8CC',
-            // light:'#5cdfe7',
-            // dark:"#007d85",
-            contrastText: '#00A8CC',
+          main: '#FF0000',
+          // light:'#5cdfe7',
+          // dark:"#007d85",
+          contrastText: '#00A8CC',
         },
         background:{
             default:"#FFFFFF"
