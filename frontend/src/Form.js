@@ -1,9 +1,10 @@
 import React from 'react';
 import './App.css';
-import { MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox } from '@mui/material';
+import { MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';import { useState, useEffect } from 'react';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useState, useEffect } from 'react';
 import TakeoutDiningIcon from '@mui/icons-material/TakeoutDining';
 import BentoIcon from '@mui/icons-material/Bento';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
@@ -22,15 +23,19 @@ import ShuffleIcon from '@mui/icons-material/Shuffle';
 import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
 import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
 import CakeIcon from '@mui/icons-material/Cake';
+import { MapContainer, TileLayer, useMap, Marker, Popup, Circle } from 'react-leaflet';
 function Form(props){
+    const [mapKey, setMapKey] = useState(0);
     const [inputText,setInputText] = React.useState("");
     const [categoryMenu,setCategoryMenu] = React.useState(null);
     const [foodMenu,setFoodMenu] = React.useState(null);
     const [tags,setTags] = React.useState([]);
+    const [size, setSize] = React.useState(8046.7); 
     const categoryOpen = Boolean(categoryMenu);
     const foodOpen = Boolean(foodMenu);
     useEffect(()=>{
-        console.log("form")
+        console.log(size);
+        setMapKey(props.latitude);
     });
     const categoryMenuOpen = (event)=>{
         setCategoryMenu(event.currentTarget);
@@ -65,6 +70,10 @@ function Form(props){
         listOfTags.splice(removeIndex,1);
         setTags(listOfTags);
     }
+    const setMapSize = (event)=>{
+        // console.log(event.target.value);
+        setSize(event.target.value * 1609.34);
+    }   
     return(
         <div className='Home' style={{width:props.windowwidth,height:props.windowheight}}>
             <ThemeProvider theme={theme}>
@@ -243,7 +252,29 @@ function Form(props){
                     </div>
                 </div>
                 <div className="formAttributes">
-
+                    <div className ="mapContainer">
+                    {/* https://react-leaflet.js.org/docs/start-setup/ */}
+                    <MapContainer key = {mapKey} zoom={10} center={[props.latitude, props.longitude]}  doubleClickZoom = {false} scrollWheelZoom={false} >
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        {/* each radius is a meter */}
+                        <Circle center={[props.latitude, props.longitude]} radius={size} />
+                        
+                        {/* <Marker position={[props.latitude, props.longitude]}/> */}
+                    </MapContainer>
+                    <Slider 
+                        color="secondary"
+                        onChange={setMapSize}
+                        step={0.1}
+                        min={0.1}
+                        max={10}
+                        defaultValue={5}
+                        style={{width:"250px",zIndex:"1000"}}
+                        valueLabelDisplay="auto"
+                        marks={[{value:0.1,label:"0.1 mi"},{value:5.0,label:"5.0 mi"},{value:10.0,label:"10.0 mi"}]}
+                    />
+                    </div>
                 </div>
             </div>
             </ThemeProvider>

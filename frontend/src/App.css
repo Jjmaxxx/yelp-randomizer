@@ -110,6 +110,16 @@ h1,p {
 .categoryColumn{
   width:100%;
 }
+.leaflet-container{
+  height:250px;
+  width:250px;
+}
+.mapContainer{
+  margin-left: 30px;
+  margin-top: 50px;
+  display:flex;
+  flex-direction: column;
+}
 /* .menuItem{
   margin:0;
   padding:0;

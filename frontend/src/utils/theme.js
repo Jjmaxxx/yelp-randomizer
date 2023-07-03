@@ -33,6 +33,7 @@ const theme = createTheme({
         styleOverrides: {
           root: {
             color:"black",
+            fontFamily:"poppins",
             "&.Mui-focused": {
               color:"red",
             }

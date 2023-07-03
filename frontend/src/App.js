@@ -14,6 +14,8 @@ function App() {
   const [height, setHeight] = useState(window.innerHeight);
   const [page, setPage] = useState("FrontPage")
   const [businessPictures, setBusinessPictures] = useState(null);
+  const [lat, setLat ] = useState(0);
+  const [long, setLong] = useState(0);
   const updateDimensions = () => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
@@ -22,6 +24,8 @@ function App() {
     navigator.geolocation.getCurrentPosition(function(position) {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
+      setLat(latitude);
+      setLong(longitude);
       console.log("latitude: " + latitude + " longitude: "+longitude);
       fetch("http://localhost:3001/message",{
         method: "POST",
@@ -55,7 +59,7 @@ function App() {
         }
       {
         page ==="Form" &&
-          <Form windowwidth={width} windowheight={height}/>
+          <Form windowwidth={width} windowheight={height} latitude = {lat} longitude={long}/>
       }
       </ThemeProvider>
     </div>
