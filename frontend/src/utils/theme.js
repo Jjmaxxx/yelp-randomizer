@@ -34,6 +34,7 @@ const theme = createTheme({
           root: {
             color:"black",
             fontFamily:"poppins",
+            fontSize:"20px",
             "&.Mui-focused": {
               color:"red",
             }

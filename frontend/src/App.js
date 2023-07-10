@@ -8,6 +8,11 @@ import "./App.css";
 import { AppBar, Toolbar, Button } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import styles from './utils/styles.js';
+import InfiniteLooping from "./InfiniteLooping.js";
+import { motion } from "framer-motion";
+
+let staticPhotos = ["./images/stockphoto1.jpg","./images/stockphoto2.jpg","./images/stockphoto3.jpg","./images/stockphoto4.jpg","./images/stockphoto5.png"];
+
 function App() {
   const style = styles;
   const [width, setWidth] = useState(window.innerWidth);
@@ -48,19 +53,42 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <AppBar style={{height:"72px",width:"100%"}}color="primary" position="sticky">
+      <AppBar style={{height:"80px",width:"100%"}}color="primary" position="sticky">
         <Toolbar sx={style.toolBar}>
-            <img style={{height:"70%"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
+          <img style={{height:"70%"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
         </Toolbar>
       </AppBar>
       {
         page ==="FrontPage" &&
-          <FrontPage windowwidth={width} windowheight={height} pictures = {businessPictures} changePage ={changePage}/>
+          <FrontPage style={{minHeight:"400px"}}windowwidth={width} windowheight={height-300} changePage ={changePage}/>
         }
       {
         page ==="Form" &&
-          <Form windowwidth={width} windowheight={height} latitude = {lat} longitude={long}/>
+          <Form style={{minHeight:"400px"}} windowwidth={width} windowheight={height} latitude = {lat} longitude={long}/>
       }
+      <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>
+        <InfiniteLooping > 
+          {
+            businessPictures===null ? 
+            (()=>{staticPhotos.map((src)=>{
+              return(<img src={require(`${ src}`)} width={"100%"} height={"784px"} alt={src}></img>) 
+            })})
+          :
+          businessPictures.map((image)=>{
+            return(
+              <motion.div
+                whileHover={{ scale: 1.10 }}
+                whileTap={{ scale: 0.8 }}
+              >
+              <a href = {image.url}>
+                <img src={`${image.image_url}`} width={"225px"} height={"175px"} alt={image.name} style={{borderRadius: "5px",marginLeft:"12.5px",marginRight:"12.5px"}}/>
+              </a>
+              </motion.div>
+            ) 
+            })
+          }
+        </InfiniteLooping>
+      </div>
       </ThemeProvider>
     </div>
   );

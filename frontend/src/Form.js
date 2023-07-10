@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
+import { IconButton, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -21,9 +21,10 @@ import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import IcecreamIcon from '@mui/icons-material/Icecream';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
 import CakeIcon from '@mui/icons-material/Cake';
-import { MapContainer, TileLayer, useMap, Marker, Popup, Circle } from 'react-leaflet';
+import { useMapEvents,MapContainer, TileLayer, useMap, Marker, Popup, Circle } from 'react-leaflet';
 function Form(props){
     const [mapKey, setMapKey] = useState(0);
     const [inputText,setInputText] = React.useState("");
@@ -31,12 +32,17 @@ function Form(props){
     const [foodMenu,setFoodMenu] = React.useState(null);
     const [tags,setTags] = React.useState([]);
     const [size, setSize] = React.useState(8046.7); 
+    const [latitude,setLatitude] = React.useState(0);
+    const [longitude,setLongitude] = React.useState(0);
+    const [anchorPop, setAnchorPop] = React.useState(null);
     const categoryOpen = Boolean(categoryMenu);
     const foodOpen = Boolean(foodMenu);
+    const openPop = Boolean(anchorPop);
     useEffect(()=>{
-        console.log(size);
         setMapKey(props.latitude);
-    });
+        setLatitude(props.latitude);
+        setLongitude(props.longitude);
+    },[props.latitude,props.longitude]);
     const categoryMenuOpen = (event)=>{
         setCategoryMenu(event.currentTarget);
     }
@@ -48,6 +54,12 @@ function Form(props){
     }
     const foodMenuClose=(event)=>{
         setFoodMenu(null);
+    }
+    const openHelp = (event)=>{
+        setAnchorPop(event.target);
+    }
+    const closeHelp = ()=>{
+        setAnchorPop(null);
     }
     const inputTag = (event) =>{
         console.log(event);
@@ -74,8 +86,17 @@ function Form(props){
         // console.log(event.target.value);
         setSize(event.target.value * 1609.34);
     }   
+    const MapEvents = () => {
+        useMapEvents({
+          click(e) {
+            setLatitude(e.latlng.lat);
+            setLongitude(e.latlng.lng);
+          },
+        });
+        return false;
+    }
     return(
-        <div className='Home' style={{width:props.windowwidth,height:props.windowheight}}>
+        <div className='Home' style={{width:props.windowwidth, minHeight:"400px"}}>
             <ThemeProvider theme={theme}>
             <CssBaseline/>
             <div className="formPage">
@@ -234,8 +255,8 @@ function Form(props){
                             value ={inputText}
                             onChange = {(e)=>(setInputText(e.target.value))}
                             onKeyDown = {inputTag}
-                            placeholder="e.g. lunch, cafes, waffles"
-                            inputProps={{style: {fontFamily:"poppins", width:"200px"}}}
+                            placeholder="e.g. lunch, waffles"
+                            inputProps={{style: {fontFamily:"poppins", width:"200px",fontSize:"20px"}}}
                         />
                         <Checkbox 
                             icon={<ShuffleIcon />}
@@ -253,27 +274,81 @@ function Form(props){
                 </div>
                 <div className="formAttributes">
                     <div className ="mapContainer">
-                    {/* https://react-leaflet.js.org/docs/start-setup/ */}
-                    <MapContainer key = {mapKey} zoom={10} center={[props.latitude, props.longitude]}  doubleClickZoom = {false} scrollWheelZoom={false} >
-                        <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        <div className="mapHeadingContainer">
+                            <div className="mapTitle">Search Radius</div>
+                            <div
+                                onMouseEnter={openHelp}
+                                onMouseLeave={closeHelp}
+                            >
+                                <HelpOutlineIcon 
+                                    style={{marginLeft:'5px',marginTop:"7px"}} 
+                                    
+                                />
+                            </div>
+                            <Popover
+                                sx={{
+                                    pointerEvents: 'none',
+                                    width:"350px",
+                                    height:"300px"
+                                }}
+                                color="secondary"
+                                open={openPop}
+                                anchorEl={anchorPop}
+                                anchorOrigin={{
+                                    vertical: -75,
+                                    horizontal: 'left',
+                                }}
+                                onClose={closeHelp}
+                                disableRestoreFocus
+                            >
+                                Click to Move the Circle. Hold and Click to Move the Map.
+                            </Popover>
+                        </div>
+                        {/* https://react-leaflet.js.org/docs/start-setup/ */}
+                        <MapContainer 
+                            key = {mapKey} 
+                            zoom={10} 
+                            center={[latitude, longitude]}  
+                            doubleClickZoom = {false} 
+                            style={{border:"2px red solid"}}
+                        >
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            {/* each radius is a meter */}
+                            <Circle center={[latitude, longitude]} radius={size} />
+                            <MapEvents />
+                            <Marker position={[props.latitude, props.longitude]}/>
+                        </MapContainer>
+                        <Slider 
+                            color="secondary"
+                            onChange={setMapSize}
+                            step={0.1}
+                            min={0.1}
+                            max={50}
+                            defaultValue={5}
+                            style={{width:"300px",zIndex:"1000"}}
+                            valueLabelDisplay="auto"
+                            marks={[{value:0.1,label:"0.1 mi"},{value:25.0,label:"25.0 mi"},{value:50.0,label:"50.0 mi"}]}
                         />
-                        {/* each radius is a meter */}
-                        <Circle center={[props.latitude, props.longitude]} radius={size} />
-                        
-                        {/* <Marker position={[props.latitude, props.longitude]}/> */}
-                    </MapContainer>
-                    <Slider 
-                        color="secondary"
-                        onChange={setMapSize}
-                        step={0.1}
-                        min={0.1}
-                        max={10}
-                        defaultValue={5}
-                        style={{width:"250px",zIndex:"1000"}}
-                        valueLabelDisplay="auto"
-                        marks={[{value:0.1,label:"0.1 mi"},{value:5.0,label:"5.0 mi"},{value:10.0,label:"10.0 mi"}]}
+                    </div>
+                    <Divider 
+                        orientation="vertical"
+                        sx={{ height:"300px",borderRightWidth: 3, }} 
                     />
+                    <div className="filterContainer">
+                        <div className="filterTitle">
+                            Filters
+                        </div>
+                        <div className="filters">
+                            <div className="priceContainer">
+                                <p style={{fontSize:'15px'}}>Price:</p>
+                                <p className="prices">$</p>
+                                <p className="prices">$$</p>
+                                <p className="prices">$$$</p>
+                                <p className="prices">$$$$</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
