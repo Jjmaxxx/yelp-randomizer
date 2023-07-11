@@ -87,9 +87,11 @@ h1,p {
   width:100%;
   display:flex;
   justify-content: space-evenly;
+  flex-wrap:wrap;
   align-items: center;
   margin-top:75px;
   margin-bottom:75px;
+  gap:50px
 }
 .formCategoriesSelections{
   display:flex;
@@ -117,8 +119,8 @@ h1,p {
   width:100%;
 }
 .leaflet-container{
-  height:300px;
-  width:300px;
+  height:350px;
+  width:350px;
 }
 .mapContainer{
   display:flex;
@@ -136,12 +138,14 @@ h1,p {
 .filterContainer{
   display:flex;
   flex-direction: column;
-  height:390px;
-  width:300px
+  height:442px;
+  width:350px
 }
 .filterTitle{
   font-family:poppins;
   font-size:25px;
+  border-bottom: 2px red solid;
+
 }
 .filters{
   display:flex;
@@ -156,13 +160,40 @@ h1,p {
   font-size: 20px;
   border-radius: 20px;
   border: 1px rgb(210, 200, 200) solid;
-  padding: 5px
+  padding: 5px;
+  background:white;
+  transition-duration: 0.3s;
 }
-.prices:hover{
+.priceSelected{
+  font-size: 20px;
+  border-radius: 20px;
+  border: 1px rgb(210, 200, 200) solid;
+  padding: 5px;
   background: rgb(210, 200, 200);
   user-select: none;
   cursor: pointer;
   transition-duration: 0.3s;
+}
+.priceSelected:hover{
+  cursor: pointer;
+  transition-duration: 0.3s;
+  user-select: none;
+}
+.prices:hover{
+  user-select: none;
+  cursor: pointer;
+}
+.ratingsContainer{
+  display:flex;
+  margin:0;
+  padding:0;
+  align-items: center;
+}
+.ratings{
+  display:flex;
+  flex-direction: column;
+  gap:10px;
+  margin-top:8px;
 }
 body{
   transform: scale(1.00);

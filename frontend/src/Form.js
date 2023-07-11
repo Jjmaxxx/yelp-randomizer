@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { IconButton, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
+import { Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -25,6 +25,8 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
 import CakeIcon from '@mui/icons-material/Cake';
 import { useMapEvents,MapContainer, TileLayer, useMap, Marker, Popup, Circle } from 'react-leaflet';
+let starRatings = ["./images/stars/0 star.png","./images/stars/1 star.png","./images/stars/2 star.png","./images/stars/3 star.png","./images/stars/4 star.png"];
+const prices = ["$","$$","$$$","$$$$"];
 function Form(props){
     const [mapKey, setMapKey] = useState(0);
     const [inputText,setInputText] = React.useState("");
@@ -35,6 +37,7 @@ function Form(props){
     const [latitude,setLatitude] = React.useState(0);
     const [longitude,setLongitude] = React.useState(0);
     const [anchorPop, setAnchorPop] = React.useState(null);
+    const [priceStyle, setPriceStyle] = React.useState(["prices","prices","prices","prices"])
     const categoryOpen = Boolean(categoryMenu);
     const foodOpen = Boolean(foodMenu);
     const openPop = Boolean(anchorPop);
@@ -94,6 +97,20 @@ function Form(props){
           },
         });
         return false;
+    }
+    const changePrice = (index)=>{
+        let priceStyles = priceStyle.map((price,i)=>{
+            if(index === i){
+                if(price=== "prices"){
+                    return "priceSelected";
+                }else{
+                    return "prices";
+                }
+            }else{
+                return price
+            }
+        })
+        setPriceStyle(priceStyles);
     }
     return(
         <div className='Home' style={{width:props.windowwidth, minHeight:"400px"}}>
@@ -327,15 +344,19 @@ function Form(props){
                             min={0.1}
                             max={50}
                             defaultValue={5}
-                            style={{width:"300px",zIndex:"1000"}}
+                            style={{width:"350px",zIndex:"1000"}}
                             valueLabelDisplay="auto"
                             marks={[{value:0.1,label:"0.1 mi"},{value:25.0,label:"25.0 mi"},{value:50.0,label:"50.0 mi"}]}
                         />
                     </div>
-                    <Divider 
-                        orientation="vertical"
-                        sx={{ height:"300px",borderRightWidth: 3, }} 
-                    />
+                    {
+                        props.windowwidth> 852 &&
+                            <Divider 
+                                orientation="vertical"
+                                sx={{ height:"300px",borderRightWidth: 3, marginLeft:"25px",marginRight:"25px"}} 
+                            />
+                    }
+                   
                     <div className="filterContainer">
                         <div className="filterTitle">
                             Filters
@@ -343,10 +364,36 @@ function Form(props){
                         <div className="filters">
                             <div className="priceContainer">
                                 <p style={{fontSize:'15px'}}>Price:</p>
-                                <p className="prices">$</p>
-                                <p className="prices">$$</p>
-                                <p className="prices">$$$</p>
-                                <p className="prices">$$$$</p>
+                                {prices.map((price,index)=>{
+                                    return(
+                                            <p onClick= {()=>{changePrice(index)}} className = {priceStyle[index]}>
+                                                {prices[index]}
+                                            </p>
+                                        )
+                                    })
+                                }
+                            </div>
+                            <div className='ratingsContainer'>
+                                <p style={{fontSize:'15px',marginRight:"5px"}}>Ratings:</p>
+                                <div className="ratings">
+                                    <Select
+                                        defaultValue={0}
+                                        sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
+                                    >
+                                        {starRatings.map((image,index)=>{
+                                            return(
+                                                <MenuItem value={index}>
+                                                    <div style={{display:"flex"}}>
+                                                        <img src={require(`${ image}`)} width = "200px" height="36px"alt={image}/>
+                                                        <p style={{marginLeft:"10px",fontSize:'10px'}}>& up</p>
+                                                    </div>
+                                                    
+                                                </MenuItem>
+                                            )
+                                        })} 
+                                    </Select>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
