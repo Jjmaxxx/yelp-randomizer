@@ -28,7 +28,7 @@ function FrontPage(props){
                                     margin:"20px",
                                 }}
                             > 
-                            <div style={{display:"flex",alignItems:"center",justifyContent:"center",userSelect: "none"}}>
+                            <div style={{fontFamily:"Roboto",display:"flex",alignItems:"center",justifyContent:"center",userSelect: "none"}}>
                                 <SearchIcon fontSize="large"/>
                                 Start
                             </div>

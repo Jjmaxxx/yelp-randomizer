@@ -27,5 +27,6 @@ code {
   animation: slideAnimation linear infinite;
 }
 body {
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-x: hidden;
+  overflow:visible
 }

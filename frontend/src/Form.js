@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import { Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
+import {FormControlLabel, Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import TakeoutDiningIcon from '@mui/icons-material/TakeoutDining';
 import BentoIcon from '@mui/icons-material/Bento';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
@@ -27,6 +27,23 @@ import CakeIcon from '@mui/icons-material/Cake';
 import { useMapEvents,MapContainer, TileLayer, useMap, Marker, Popup, Circle } from 'react-leaflet';
 let starRatings = ["./images/stars/0 star.png","./images/stars/1 star.png","./images/stars/2 star.png","./images/stars/3 star.png","./images/stars/4 star.png"];
 const prices = ["$","$$","$$$","$$$$"];
+function usePreventScrollOnFocus() {
+    const scrollPos = React.useRef([0, 0]);
+
+    React.useEffect(() => {
+        const scrollHandler = () => {
+            scrollPos.current[0] = window.scrollX;
+            scrollPos.current[1] = window.scrollY;
+        };
+        window.addEventListener('scroll', scrollHandler);
+        return () => window.removeEventListener('scroll', scrollHandler);
+    }, []);
+
+    const handleFocus = React.useCallback(() => {
+        window.scrollTo(...scrollPos.current);
+    }, []);
+    return handleFocus;
+}
 function Form(props){
     const [mapKey, setMapKey] = useState(0);
     const [inputText,setInputText] = React.useState("");
@@ -306,7 +323,8 @@ function Form(props){
                                 sx={{
                                     pointerEvents: 'none',
                                     width:"350px",
-                                    height:"300px"
+                                    height:"300px",
+                                    onFocus:usePreventScrollOnFocus()
                                 }}
                                 color="secondary"
                                 open={openPop}
@@ -363,7 +381,7 @@ function Form(props){
                         </div>
                         <div className="filters">
                             <div className="priceContainer">
-                                <p style={{fontSize:'15px'}}>Price:</p>
+                                <p style={{fontSize:'20px'}}>Price:</p>
                                 {prices.map((price,index)=>{
                                     return(
                                             <p onClick= {()=>{changePrice(index)}} className = {priceStyle[index]}>
@@ -374,18 +392,19 @@ function Form(props){
                                 }
                             </div>
                             <div className='ratingsContainer'>
-                                <p style={{fontSize:'15px',marginRight:"5px"}}>Ratings:</p>
+                                <p style={{fontSize:'20px',marginRight:"5px"}}>Ratings:</p>
                                 <div className="ratings">
                                     <Select
                                         defaultValue={0}
                                         sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
+                                        MenuProps={{onFocus:usePreventScrollOnFocus()}}
                                     >
                                         {starRatings.map((image,index)=>{
                                             return(
                                                 <MenuItem value={index}>
                                                     <div style={{display:"flex"}}>
-                                                        <img src={require(`${ image}`)} width = "200px" height="36px"alt={image}/>
-                                                        <p style={{marginLeft:"10px",fontSize:'10px'}}>& up</p>
+                                                        <img src={require(`${ image}`)} width = "215px" height="40px"alt={image}/>
+                                                        <p style={{marginLeft:"10px",fontSize:'13px',marginTop:"8px"}}>& up</p>
                                                     </div>
                                                     
                                                 </MenuItem>
@@ -394,6 +413,41 @@ function Form(props){
                                     </Select>
                                 </div>
                                 
+                            </div>
+                            <div className="filterSortOpenContainer">
+                                <div className="sortContainer">
+                                    <div>
+                                        Sort By:
+                                    </div>
+                                    <Select
+                                        defaultValue={1}
+                                        color="secondary"
+                                        InputLabelProps={{
+                                            style: { color: 'red' },
+                                        }}
+                                        style={{fontSize:"18px"}}
+                                        MenuProps={{onFocus:usePreventScrollOnFocus()}}
+                                    >
+                                        <MenuItem value={1}>Best Match</MenuItem>
+                                        <MenuItem value={2}>Ratings</MenuItem>
+                                        <MenuItem value={3}>Review Count</MenuItem>
+                                        <MenuItem value={4}>Distance</MenuItem>
+                                    </Select>
+                                </div>
+                                <FormControlLabel
+                                    value="top"
+                                    control={
+                                    <Checkbox 
+                                        color="secondary"
+                                        style={{
+                                            transform: "scale(1.5)",
+                                            fontSize:"25px"
+                                        }}
+                                        disableRipple
+                                    />}
+                                    label="Open?"
+                                    labelPlacement="top"
+                                />
                             </div>
                         </div>
                     </div>

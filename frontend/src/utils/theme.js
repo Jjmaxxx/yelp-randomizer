@@ -45,21 +45,18 @@ const theme = createTheme({
       // MuiOutlinedInput: {
       //   styleOverrides: {
       //     root: {
-      //       "& .MuiSvgIcon-root": {
-      //         color: "black",
+      //       '&:before': {
+      //         borderColor: 'white',
       //       },
-      //       "& .MuiOutlinedInput-notchedOutline": {
-      //         border: `1px solid red`,
+      //       '&:after': {
+      //           borderColor: 'white',
       //       },
-      //       "&.Mui-focused": {
-      //         "& .MuiOutlinedInput-notchedOutline": {
-      //           border: `1px solid black`,
-      //           color:'red'
-      //         }
-      //       }
+      //       '&:not(.Mui-disabled):hover::before': {
+      //           borderColor: 'white',
+      //       },
       //     }
       //   }
-      //},
+      // },
       MuiInput: {
         styleOverrides: {
           // props:{
@@ -98,7 +95,8 @@ const theme = createTheme({
     typography: {
         button: {
           textTransform: 'none'
-        }
+        },
+        fontFamily:"poppins"
     },
     palette: {
         primary: {
