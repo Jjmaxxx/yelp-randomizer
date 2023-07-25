@@ -21,6 +21,7 @@ function App() {
   const [businessPictures, setBusinessPictures] = useState(null);
   const [lat, setLat ] = useState(0);
   const [long, setLong] = useState(0);
+  const [data,setData] = useState({});
   const updateDimensions = () => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
@@ -35,19 +36,33 @@ function App() {
       fetch("http://localhost:3001/message",{
         method: "POST",
         headers: {
-          'Content-type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({latitude:latitude,longitude:longitude})
       })
       .then((res) => res.json())
       .then((data) => {setBusinessPictures(data.businesses)});
     });
+    // fetch("http://localhost:3001/search",{
+    //   method: "POST",
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(data)
+    // })
+    // .then((res) => res.json())
+    // .then(data => console.log(data));
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+  }, [data]);
   
   function changePage(page){
-    setPage(page)
+    setPage(page);
+  }
+  function setFormData(data){
+    console.log(JSON.stringify(data));
+    setData(data);
+
   }
   return (
     <div className="App">
@@ -64,7 +79,14 @@ function App() {
         }
       {
         page ==="Form" &&
-          <Form style={{minHeight:"400px"}} windowwidth={width} windowheight={height} latitude = {lat} longitude={long}/>
+          <Form 
+            style={{minHeight:"400px"}} 
+            windowwidth={width} 
+            windowheight={height} 
+            latitude = {lat} 
+            longitude={long}
+            setFormData={setFormData}
+          />
       }
       <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>
         <InfiniteLooping > 

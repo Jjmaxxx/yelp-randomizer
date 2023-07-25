@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
-import {FormControlLabel, Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
+import {FormControl, FormControlLabel, Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
+
 import TakeoutDiningIcon from '@mui/icons-material/TakeoutDining';
 import BentoIcon from '@mui/icons-material/Bento';
 import RamenDiningIcon from '@mui/icons-material/RamenDining';
@@ -24,26 +26,11 @@ import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
 import CakeIcon from '@mui/icons-material/Cake';
-import { useMapEvents,MapContainer, TileLayer, useMap, Marker, Popup, Circle } from 'react-leaflet';
+import usePreventScrollOnFocus from './preventScroll.js';
+import { useMapEvents,MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 let starRatings = ["./images/stars/0 star.png","./images/stars/1 star.png","./images/stars/2 star.png","./images/stars/3 star.png","./images/stars/4 star.png"];
 const prices = ["$","$$","$$$","$$$$"];
-function usePreventScrollOnFocus() {
-    const scrollPos = React.useRef([0, 0]);
 
-    React.useEffect(() => {
-        const scrollHandler = () => {
-            scrollPos.current[0] = window.scrollX;
-            scrollPos.current[1] = window.scrollY;
-        };
-        window.addEventListener('scroll', scrollHandler);
-        return () => window.removeEventListener('scroll', scrollHandler);
-    }, []);
-
-    const handleFocus = React.useCallback(() => {
-        window.scrollTo(...scrollPos.current);
-    }, []);
-    return handleFocus;
-}
 function Form(props){
     const [mapKey, setMapKey] = useState(0);
     const [inputText,setInputText] = React.useState("");
@@ -55,6 +42,9 @@ function Form(props){
     const [longitude,setLongitude] = React.useState(0);
     const [anchorPop, setAnchorPop] = React.useState(null);
     const [priceStyle, setPriceStyle] = React.useState(["prices","prices","prices","prices"])
+    const [sortBy, setSortBy]= React.useState("best_match");
+    const [open,setOpen] = React.useState(true);
+    const [ratings,setRatings] = React.useState(0);
     const categoryOpen = Boolean(categoryMenu);
     const foodOpen = Boolean(foodMenu);
     const openPop = Boolean(anchorPop);
@@ -80,6 +70,31 @@ function Form(props){
     }
     const closeHelp = ()=>{
         setAnchorPop(null);
+    }
+    const handleRatings = (event)=>{
+        setRatings(event.target.value);
+    }
+    const handleSort = (event)=>{
+        switch(event.target.value){
+            case 2:
+                setSortBy("rating")
+                break;
+            case 3:
+                setSortBy("review_count")
+                break;
+            case 4:
+                setSortBy("distance")
+                break;
+            default:
+                setSortBy("best_match")
+        }     
+    }
+    const handleOpen = (event) =>{
+        if(open){
+            setOpen(false);
+        }else{
+            setOpen(true);
+        }
     }
     const inputTag = (event) =>{
         console.log(event);
@@ -159,7 +174,8 @@ function Form(props){
                             open={categoryOpen}
                             onClose={categoryMenuClose}
                             onMouseLeave={categoryMenuClose}
-                            MenuListProps={{ onMouseLeave: categoryMenuClose }}
+                            MenuListProps={{ onMouseLeave: categoryMenuClose}}
+                            onFocus={usePreventScrollOnFocus()}
                         >
                             <div className = "categoryMenu" onClick={categoryMenuClose} style={{width:"280px"}}>
                                 <div className = "categoryColumn">
@@ -225,7 +241,8 @@ function Form(props){
                             open={foodOpen}
                             onClose={foodMenuClose}
                             onMouseLeave={foodMenuClose}
-                            MenuListProps={{ onMouseLeave: foodMenuClose }}
+                            MenuListProps={{ onMouseLeave: foodMenuClose}}
+                            onFocus={usePreventScrollOnFocus()}
                         >
                             <div className = "categoryMenu" onClick={foodMenuClose} style={{width:"280px"}}>
                                 <div className = "categoryColumn">
@@ -324,8 +341,8 @@ function Form(props){
                                     pointerEvents: 'none',
                                     width:"350px",
                                     height:"300px",
-                                    onFocus:usePreventScrollOnFocus()
                                 }}
+                                onFocus={usePreventScrollOnFocus()}
                                 color="secondary"
                                 open={openPop}
                                 anchorEl={anchorPop}
@@ -394,10 +411,11 @@ function Form(props){
                             <div className='ratingsContainer'>
                                 <p style={{fontSize:'20px',marginRight:"5px"}}>Ratings:</p>
                                 <div className="ratings">
+                                    <FormControl fullWidth={true}>
                                     <Select
                                         defaultValue={0}
                                         sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
-                                        MenuProps={{onFocus:usePreventScrollOnFocus()}}
+                                        onChange={handleRatings}
                                     >
                                         {starRatings.map((image,index)=>{
                                             return(
@@ -411,6 +429,7 @@ function Form(props){
                                             )
                                         })} 
                                     </Select>
+                                    </FormControl>
                                 </div>
                                 
                             </div>
@@ -425,8 +444,9 @@ function Form(props){
                                         InputLabelProps={{
                                             style: { color: 'red' },
                                         }}
+                                        onChange={handleSort}
                                         style={{fontSize:"18px"}}
-                                        MenuProps={{onFocus:usePreventScrollOnFocus()}}
+                                        // MenuProps={{onFocus:usePreventScrollOnFocus()}}
                                     >
                                         <MenuItem value={1}>Best Match</MenuItem>
                                         <MenuItem value={2}>Ratings</MenuItem>
@@ -447,10 +467,39 @@ function Form(props){
                                     />}
                                     label="Open?"
                                     labelPlacement="top"
+                                    checked={open}
+                                    onChange={handleOpen}
                                 />
                             </div>
                         </div>
                     </div>
+                </div>
+                <div style={{color:"white",fontSize:"20px",borderRadius:"5px",display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:'red', minWidth:"120px",minHeight:"60px"}}>            
+                    <motion.div
+                        whileHover={{ scale: 1.10 }}
+                        whileTap={{ scale: 0.8 }}
+                        onClick = {()=>{
+                            props.setFormData({
+                                rating:ratings,
+                                sortBy:sortBy,
+                                open:open,
+                                prices:priceStyle,
+                                tags:tags, 
+                                size:size,
+                                latitude:latitude,
+                                longitude:longitude
+                            })
+                        }} 
+                        sx={{
+                            paddingLeft: "20px",
+                            paddingRight: "20px",
+                            margin:"20px",
+                        }}
+                    > 
+                    <div style={{fontFamily:"poppins",display:"flex",alignItems:"center",justifyContent:"center",userSelect: "none"}}>
+                        Generate
+                    </div>
+                    </motion.div>
                 </div>
             </div>
             </ThemeProvider>
