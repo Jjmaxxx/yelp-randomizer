@@ -21,7 +21,7 @@ function App() {
   const [businessPictures, setBusinessPictures] = useState(null);
   const [lat, setLat ] = useState(0);
   const [long, setLong] = useState(0);
-  const [data,setData] = useState({});
+  const [data,setData] = useState(null);
   const updateDimensions = () => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
@@ -43,15 +43,17 @@ function App() {
       .then((res) => res.json())
       .then((data) => {setBusinessPictures(data.businesses)});
     });
-    // fetch("http://localhost:3001/search",{
-    //   method: "POST",
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(data)
-    // })
-    // .then((res) => res.json())
-    // .then(data => console.log(data));
+    if(data !== null){
+      fetch("http://localhost:3001/search",{
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then((res) => res.json())
+      .then((results) => console.log(results.body));
+    }
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, [data]);

@@ -4,9 +4,9 @@ import './App.css';
 
 export default function InfiniteLooping(props) {
   const [instances, setInstances] = useState([1, 2]);
-  useEffect(() => {
-    console.log(props.children);
-  }, [props.children]);
+  // useEffect(() => {
+  //   console.log(props.children);
+  // }, [props.children]);
   return (
     <div className="example">
       <div style={{ width: "100%" }}>

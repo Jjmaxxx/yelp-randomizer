@@ -119,7 +119,12 @@ function Form(props){
     }
     const setMapSize = (event)=>{
         // console.log(event.target.value);
-        setSize(event.target.value * 1609.34);
+        let miles = event.target.value;
+        let meters = miles * 1609.34;
+        if(meters > 40000){
+            meters = 40000;
+        }
+        setSize(meters);
     }   
     const MapEvents = () => {
         useMapEvents({
@@ -377,11 +382,11 @@ function Form(props){
                             onChange={setMapSize}
                             step={0.1}
                             min={0.1}
-                            max={50}
+                            max={25}
                             defaultValue={5}
                             style={{width:"350px",zIndex:"1000"}}
                             valueLabelDisplay="auto"
-                            marks={[{value:0.1,label:"0.1 mi"},{value:25.0,label:"25.0 mi"},{value:50.0,label:"50.0 mi"}]}
+                            marks={[{value:0.1,label:"0.1 mi"},{value:25.0,label:"25.0 mi"},{value:12.5,label:"12.5 mi"}]}
                         />
                     </div>
                     {
