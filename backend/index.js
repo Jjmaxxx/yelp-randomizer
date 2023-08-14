@@ -33,15 +33,24 @@ app.post("/search", (req, res) => {
     prices = [1,2,3,4];
   }
   let tags = req.body.tags;
-  tags.forEach((tag)=>{
-    (async()=>{
-      let businesses = await search(req.body.latitude,req.body.longitude,tag,Math.ceil(req.body.size),10,prices,req.body.open,req.body.sortBy);
-      businesses.forEach((business,num)=>{
-        console.log(num+ ". " + business.name);
-      })
-    })();
+  let allRestauraunts = [];
+  new Promise(resolve =>{
+    tags.forEach((tag,num)=>{
+      (async()=>{
+        let businesses = await search(req.body.latitude,req.body.longitude,tag,Math.ceil(req.body.size),10,prices,req.body.open,req.body.sortBy);
+        businesses.forEach((business,num)=>{
+          allRestauraunts.push(business);
+          console.log(num+ ". " + business.name);
+        })
+        if(num == tags.length-1){
+          resolve("done");
+        }
+      })();
+    })
+  }).then((value)=>{
+    console.log(value);
+    res.json({restauraunts:allRestauraunts})
   })
-  res.json({body:req.body})
 });
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

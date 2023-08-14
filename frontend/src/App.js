@@ -1,6 +1,7 @@
 import React from "react";
 import FrontPage from "./FrontPage.js";
-import Form from "./Form.js"
+import Form from "./Form.js";
+import Result from "./Result.js";
 import { useState, useEffect } from 'react';
 import theme from './utils/theme.js';
 import { ThemeProvider } from "@mui/material/styles";
@@ -19,6 +20,7 @@ function App() {
   const [height, setHeight] = useState(window.innerHeight);
   const [page, setPage] = useState("FrontPage")
   const [businessPictures, setBusinessPictures] = useState(null);
+  const [searchResults, setSearchResults] = useState(null);
   const [lat, setLat ] = useState(0);
   const [long, setLong] = useState(0);
   const [data,setData] = useState(null);
@@ -52,7 +54,7 @@ function App() {
         body: JSON.stringify(data)
       })
       .then((res) => res.json())
-      .then((results) => console.log(results.body));
+      .then((results) => {setSearchResults(results.restauraunts)});
     }
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
@@ -61,10 +63,11 @@ function App() {
   function changePage(page){
     setPage(page);
   }
-  function setFormData(data){
-    console.log(JSON.stringify(data));
-    setData(data);
-
+  function setFormData(data,page){
+    if(data.tags.length>0){
+      setData(data);
+      changePage(page);
+    }
   }
   return (
     <div className="App">
@@ -77,8 +80,13 @@ function App() {
       </AppBar>
       {
         page ==="FrontPage" &&
-          <FrontPage style={{minHeight:"400px"}}windowwidth={width} windowheight={height-300} changePage ={changePage}/>
-        }
+          <FrontPage 
+            style={{minHeight:"400px"}}
+            windowwidth={width} 
+            windowheight={height-300} 
+            changePage ={changePage}
+          />
+      }
       {
         page ==="Form" &&
           <Form 
@@ -88,6 +96,15 @@ function App() {
             latitude = {lat} 
             longitude={long}
             setFormData={setFormData}
+          />
+      }
+      {
+        page === "Result" &&
+          <Result
+            style={{minHeight:"400px"}} 
+            windowwidth={width} 
+            windowheight={height} 
+            results = {searchResults}
           />
       }
       <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>

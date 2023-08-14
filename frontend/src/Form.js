@@ -493,7 +493,9 @@ function Form(props){
                                 size:size,
                                 latitude:latitude,
                                 longitude:longitude
-                            })
+                            },
+                            "Result"
+                            )
                         }} 
                         sx={{
                             paddingLeft: "20px",
