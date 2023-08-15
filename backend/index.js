@@ -15,7 +15,7 @@ app.post("/message", (req, res) => {
   
   (async()=>{
     // await search(req.body.latitude,req.body.longitude,"japanese chinese mexican",1000,20);
-    let businesses = await search(req.body.latitude,req.body.longitude,"",1000,20,[1,2,3,4],true,"best_match");
+    let businesses = await search(req.body.latitude,req.body.longitude,"",1000,20,[1,2,3,4],false,"best_match");
     res.json({ businesses: businesses });
   })();
 });

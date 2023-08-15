@@ -42,6 +42,10 @@
   font-family: 'poppins';
   src: local('poppins'), url(./fonts/Poppins-SemiBold.ttf ) format('truetype');
 }
+@font-face {
+  font-family: 'Poppins-Medium';
+  src: local('Poppins-Medium'), url(./fonts/Poppins-Medium.ttf ) format('truetype');
+}
 h1,p {
   font-family:poppins
 }
@@ -231,7 +235,66 @@ body{
   display:flex;
   gap:5px;
   align-items: center;
+  justify-content: center;
   font-size: 16px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+.button{
+  color:white;
+  font-size:20px;
+  border-radius:5px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:red; 
+  min-width:120px;
+  min-height:60px;
+  padding:10px;
+  
+}
+.buttonText{
+  font-family: poppins;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  user-select: none;
+}
+.resultsButtonText{
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  user-select: none;
+  font-weight: 100;
+}
+.resultsButton{
+  color:black;
+  border-radius:5px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:white; 
+  border: 1px rgb(210, 200, 200) solid;
+  min-width:120px;
+  min-height:40px;
+  padding-left:10px;
+  padding-right:10px; 
+  font-family: Poppins-Medium; 
+  gap:5px
+}
+.resultsButton:hover{
+  background-color:#e1e1e1; 
+  transition-duration: 0.5s;
+  cursor:pointer
+}
+.optionButtons{
+  display:flex;
+  gap:10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 /* .menuItem{
   margin:0;

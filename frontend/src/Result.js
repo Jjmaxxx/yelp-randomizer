@@ -4,7 +4,9 @@ import {CssBaseline} from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
 import { useEffect, useState } from 'react';
-import { motion } from "framer-motion";
+import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';import { motion } from "framer-motion";
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 function Result(props){
     const restaurants = props.results;
     const [theRestauraunt, setTheRestauraunt] = useState(null);
@@ -42,13 +44,35 @@ function Result(props){
                                         <p style={{display:'flex',alignItems:'center',margin:"0",padding:"0"}}>
                                             {category.title}
                                             {theRestauraunt.categories.length-1 != num &&
-                                                <p>,</p>
+                                                <p style={{height:"100%",margin:"0",padding:"0"}}>,</p>
                                             }
                                         </p>
                                     )
                                 })
                             }
-                            | {theRestauraunt.price} | {theRestauraunt.rating} ({theRestauraunt.review_count} reviews)
+                            • {theRestauraunt.price} • {theRestauraunt.rating} ({theRestauraunt.review_count} reviews) • 
+                            <a href={`https://www.google.com/maps/dir/?api=1&origin=${props.latitude},${props.longitude}&destination=${theRestauraunt.coordinates.latitude},${theRestauraunt.coordinates.longitude}`}>{Math.round((theRestauraunt.distance/1609)*10)/10} mi away</a>
+                        </div>
+                        <div className="optionButtons">
+                            
+                            <div className="resultsButton">            
+                                <VisibilityOutlinedIcon/>
+                                <div className='resultsButtonText'>
+                                    Show results
+                                </div>
+                            </div>
+                            <div className="resultsButton" onClick={()=>{pickRestauraunt()}}>
+                                <CasinoOutlinedIcon/>            
+                                <div className='resultsButtonText'>
+                                    Reroll
+                                </div>
+                            </div>
+                            <div className="resultsButton" onClick={()=>{props.changePage("Form")}}>
+                                <RestartAltOutlinedIcon/>
+                                <div className='resultsButtonText'>
+                                    Reset
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -75,7 +75,7 @@ function App() {
       <CssBaseline/>
       <AppBar style={{height:"80px",width:"100%"}}color="primary" position="sticky">
         <Toolbar sx={style.toolBar}>
-          <img style={{height:"70%"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
+          <img onClick={()=>{changePage("FrontPage")}}style={{height:"70%",cursor:"pointer"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
         </Toolbar>
       </AppBar>
       {
@@ -105,6 +105,9 @@ function App() {
             windowwidth={width} 
             windowheight={height} 
             results = {searchResults}
+            latitude = {lat} 
+            longitude={long}
+            changePage ={changePage}
           />
       }
       <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>

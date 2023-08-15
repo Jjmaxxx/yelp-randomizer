@@ -479,7 +479,7 @@ function Form(props){
                         </div>
                     </div>
                 </div>
-                <div style={{color:"white",fontSize:"20px",borderRadius:"5px",display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:'red', minWidth:"120px",minHeight:"60px"}}>            
+                <div className="button">            
                     <motion.div
                         whileHover={{ scale: 1.10 }}
                         whileTap={{ scale: 0.8 }}
@@ -503,7 +503,7 @@ function Form(props){
                             margin:"20px",
                         }}
                     > 
-                    <div style={{fontFamily:"poppins",display:"flex",alignItems:"center",justifyContent:"center",userSelect: "none"}}>
+                    <div className='buttonText'>
                         Generate
                     </div>
                     </motion.div>

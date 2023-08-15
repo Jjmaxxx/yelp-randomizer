@@ -23,10 +23,8 @@ code {
 .loopingListItem {
   display: flex;
   width: max-content;
-
   animation: slideAnimation linear infinite;
 }
 body {
   overflow-x: hidden;
-  overflow:visible
 }
