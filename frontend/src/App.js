@@ -100,6 +100,7 @@ function App() {
       }
       {
         page === "Result" &&
+        <div>
           <Result
             style={{minHeight:"400px"}} 
             windowwidth={width} 
@@ -109,6 +110,8 @@ function App() {
             longitude={long}
             changePage ={changePage}
           />
+        </div>
+          
       }
       <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>
         <InfiniteLooping > 

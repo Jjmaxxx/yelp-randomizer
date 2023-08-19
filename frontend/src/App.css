@@ -239,6 +239,7 @@ body{
   font-size: 16px;
   flex-wrap: wrap;
   margin-top: 5px;
+  z-index:100;
 }
 .button{
   color:white;
@@ -268,6 +269,9 @@ body{
   user-select: none;
   font-weight: 100;
 }
+.resultsImage{
+  z-index:1;
+}
 .resultsButton{
   color:black;
   border-radius:5px;
@@ -281,7 +285,8 @@ body{
   padding-left:10px;
   padding-right:10px; 
   font-family: Poppins-Medium; 
-  gap:5px
+  gap:5px;
+  z-index:100;
 }
 .resultsButton:hover{
   background-color:#e1e1e1; 

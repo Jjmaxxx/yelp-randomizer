@@ -3,12 +3,15 @@ import './App.css';
 import {CssBaseline} from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';import { motion } from "framer-motion";
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import Confetti from './Confetti.js';
+
 function Result(props){
     const restaurants = props.results;
+    const confettiRef = useRef();
     const [theRestauraunt, setTheRestauraunt] = useState(null);
     useEffect(()=>{
         pickRestauraunt();
@@ -16,13 +19,15 @@ function Result(props){
 
     const pickRestauraunt = () =>{
         if(restaurants != null){
-            console.log(restaurants);
+            if(confettiRef.current != null){
+                confettiRef.current.getConfetti();
+            }
             setTheRestauraunt(restaurants[Math.floor(Math.random() * restaurants.length)]);
-            console.log(theRestauraunt);
         }
     }
     return(
         <div className='Home' style={{width:props.windowwidth, minHeight:"400px"}}>
+            
             <ThemeProvider theme={theme}>
             <CssBaseline/>
             {theRestauraunt !=null ?
@@ -36,6 +41,7 @@ function Result(props){
                                 <img src={`${theRestauraunt.image_url}`} width={props.windowwidth*.75} height={props.windowwidth*.75} alt={theRestauraunt.name} style={{border:"2px solid red",borderRadius: "5px",maxWidth:"500px",maxHeight:"500px"}}/>
                             </a>
                         </div>
+                        
                         <div className="resultsData">
                             {
                                 theRestauraunt.categories.map((category,num)=>{
@@ -43,7 +49,7 @@ function Result(props){
                                     return(
                                         <p style={{display:'flex',alignItems:'center',margin:"0",padding:"0"}}>
                                             {category.title}
-                                            {theRestauraunt.categories.length-1 != num &&
+                                            {theRestauraunt.categories.length-1 !== num &&
                                                 <p style={{height:"100%",margin:"0",padding:"0"}}>,</p>
                                             }
                                         </p>
@@ -75,6 +81,7 @@ function Result(props){
                             </div>
                         </div>
                     </div>
+                    <Confetti ref = {confettiRef} windowwidth={props.windowwidth} windowheight = {props.windowheight} style={{position:'absolute', right:0}}/>
                 </div>
             :
                 <div>
