@@ -1,37 +1,32 @@
 import React from 'react';
 import './App.css';
-import {CssBaseline} from '@mui/material';
+import {CssBaseline, CircularProgress} from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
-import { useEffect, useState,useRef } from 'react';
-import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';import { motion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import Confetti from './Confetti.js';
 
 function Result(props){
     const restaurants = props.results;
-    const confettiRef = useRef();
     const [theRestauraunt, setTheRestauraunt] = useState(null);
     useEffect(()=>{
-        pickRestauraunt();
-    },[restaurants]);
-
-    const pickRestauraunt = () =>{
+        setTheRestauraunt(null);
         if(restaurants != null){
-            if(confettiRef.current != null){
-                confettiRef.current.getConfetti();
-            }
-            setTheRestauraunt(restaurants[Math.floor(Math.random() * restaurants.length)]);
+            pickRestauraunt();
         }
+    },[restaurants]);
+    const pickRestauraunt = () =>{
+        props.spawnConfetti();
+        setTheRestauraunt(restaurants[Math.floor(Math.random() * restaurants.length)]);
     }
     return(
-        <div className='Home' style={{width:props.windowwidth, minHeight:"400px"}}>
-            
+        <div className='Home' style={{width:props.windowwidth, minHeight:"600px"}}>
             <ThemeProvider theme={theme}>
             <CssBaseline/>
             {theRestauraunt !=null ?
-                <div className= "resultsPage">
+                <div key ="restaurant" className= "resultsPage">
                     <div className="resultsContainer">
                         <div className="resultsTitle">
                             {theRestauraunt.name}
@@ -73,7 +68,7 @@ function Result(props){
                                     Reroll
                                 </div>
                             </div>
-                            <div className="resultsButton" onClick={()=>{props.changePage("Form")}}>
+                            <div className="resultsButton" onClick={()=>{props.setSearchResults(null);props.changePage("Form")}}>
                                 <RestartAltOutlinedIcon/>
                                 <div className='resultsButtonText'>
                                     Reset
@@ -81,11 +76,11 @@ function Result(props){
                             </div>
                         </div>
                     </div>
-                    <Confetti ref = {confettiRef} windowwidth={props.windowwidth} windowheight = {props.windowheight} style={{position:'absolute', right:0}}/>
+                    
                 </div>
             :
-                <div>
-                    loading
+                <div style={{display:'flex',justifyContent:"center",alignItems:"center", zIndex:"100",minHeight:"600px"}} key ="loading">
+                    <CircularProgress color="secondary" />
                 </div>
             }
             </ThemeProvider>

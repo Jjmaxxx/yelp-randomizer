@@ -76,7 +76,7 @@ const Canvas = forwardRef((props,ref) => {
     }
     let numOfConfetti = Math.floor(canvas.width/10);
     spawnConfetti= ()=>{
-        if(confetti.length < numOfConfetti*20){
+        if(confetti.length < 1500){
             for(let i=0;i<numOfConfetti;i++){
                 confetti.push(new Confetti(0, canvas.height*0.5,canvas.width/100))
                 confetti.push(new Confetti(canvas.width, canvas.height*0.5,-canvas.width/100))

@@ -2,7 +2,7 @@ import React from "react";
 import FrontPage from "./FrontPage.js";
 import Form from "./Form.js";
 import Result from "./Result.js";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import theme from './utils/theme.js';
 import { ThemeProvider } from "@mui/material/styles";
 import "./App.css";
@@ -10,6 +10,8 @@ import { AppBar, Toolbar, Button } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import styles from './utils/styles.js';
 import InfiniteLooping from "./InfiniteLooping.js";
+import Confetti from './Confetti.js';
+
 import { motion } from "framer-motion";
 
 let staticPhotos = ["./images/stockphoto1.jpg","./images/stockphoto2.jpg","./images/stockphoto3.jpg","./images/stockphoto4.jpg","./images/stockphoto5.png"];
@@ -24,6 +26,7 @@ function App() {
   const [lat, setLat ] = useState(0);
   const [long, setLong] = useState(0);
   const [data,setData] = useState(null);
+  const confettiRef = useRef();
   const updateDimensions = () => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
@@ -69,13 +72,17 @@ function App() {
       changePage(page);
     }
   }
+  function spawnConfetti(){
+    confettiRef.current.getConfetti();
+  }
   return (
     <div className="App">
+      
       <ThemeProvider theme={theme}>
       <CssBaseline/>
       <AppBar style={{height:"80px",width:"100%"}}color="primary" position="sticky">
         <Toolbar sx={style.toolBar}>
-          <img onClick={()=>{changePage("FrontPage")}}style={{height:"70%",cursor:"pointer"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
+          <img onClick={()=>{changePage("FrontPage");setSearchResults(null)}}style={{height:"70%",cursor:"pointer"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
         </Toolbar>
       </AppBar>
       {
@@ -96,11 +103,13 @@ function App() {
             latitude = {lat} 
             longitude={long}
             setFormData={setFormData}
+            
           />
       }
       {
         page === "Result" &&
         <div>
+          <Confetti ref = {confettiRef} windowwidth={width} windowheight = {height} style={{position:'absolute', right:0}}/>
           <Result
             style={{minHeight:"400px"}} 
             windowwidth={width} 
@@ -109,9 +118,12 @@ function App() {
             latitude = {lat} 
             longitude={long}
             changePage ={changePage}
+            spawnConfetti={spawnConfetti}
+            setSearchResults= {setSearchResults}
           />
-        </div>
           
+        </div>
+        
       }
       <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>
         <InfiniteLooping > 
