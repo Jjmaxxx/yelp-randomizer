@@ -6,7 +6,7 @@ import { useState, useEffect,useRef } from 'react';
 import theme from './utils/theme.js';
 import { ThemeProvider } from "@mui/material/styles";
 import "./App.css";
-import { AppBar, Toolbar, Button } from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import styles from './utils/styles.js';
 import InfiniteLooping from "./InfiniteLooping.js";
@@ -75,6 +75,7 @@ function App() {
   function spawnConfetti(){
     confettiRef.current.getConfetti();
   }
+
   return (
     <div className="App">
       
@@ -148,6 +149,7 @@ function App() {
           }
         </InfiniteLooping>
       </div>
+
       </ThemeProvider>
     </div>
   );

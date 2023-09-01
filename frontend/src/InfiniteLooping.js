@@ -15,7 +15,7 @@ export default function InfiniteLooping(props) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            position: "absolute"
+            position: "absolute",
           }}
         >
           {instances.map((image, num) => {

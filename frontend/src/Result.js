@@ -1,15 +1,16 @@
 import React from 'react';
 import './App.css';
-import {CssBaseline, CircularProgress} from '@mui/material';
+import { Dialog,CssBaseline, CircularProgress} from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './utils/theme.js';
 import { useEffect, useState } from 'react';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-
+import Zoom from '@mui/material/Zoom';
 function Result(props){
     const restaurants = props.results;
+    const [resultsOpen, setResultsOpen] = useState(false);
     const [theRestauraunt, setTheRestauraunt] = useState(null);
     useEffect(()=>{
         setTheRestauraunt(null);
@@ -20,6 +21,12 @@ function Result(props){
     const pickRestauraunt = () =>{
         props.spawnConfetti();
         setTheRestauraunt(restaurants[Math.floor(Math.random() * restaurants.length)]);
+    }
+    const handleResultsClose = ()=>{
+        setResultsOpen(false);
+    }
+    const handleResultsOpen = ()=>{
+        setResultsOpen(true);
     }
     return(
         <div className='Home' style={{width:props.windowwidth, minHeight:"600px"}}>
@@ -56,7 +63,7 @@ function Result(props){
                         </div>
                         <div className="optionButtons">
                             
-                            <div className="resultsButton">            
+                            <div className="resultsButton" onClick={()=>{handleResultsOpen()}}>            
                                 <VisibilityOutlinedIcon/>
                                 <div className='resultsButtonText'>
                                     Show results
@@ -83,6 +90,17 @@ function Result(props){
                     <CircularProgress color="secondary" />
                 </div>
             }
+
+                <Zoom in={resultsOpen}>
+                <Dialog
+                    open={resultsOpen}
+                    onClose = {handleResultsClose}
+                    hideBackdrop={true}
+                >   
+            </Dialog>
+                </Zoom>
+                <p>asdasdasd</p>
+            
             </ThemeProvider>
         </div>
     )
