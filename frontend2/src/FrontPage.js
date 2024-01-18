@@ -14,12 +14,12 @@ function FrontPage(props){
             <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
                 <Card sx={{width:"100%",margin:"20px",height:props.windowheight,marginTop:"10px",display:"flex",minHeight:"400px",minWidth:props.windowwidth}}>
                     <div style={{width:"100%",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:"10px"}}>
-                        <h1 style={{fontSize:"55px",margin:"0",textAlign:"center"}}>Don't know where to eat?</h1>
-                        <h1 style={{fontSize:"55px",margin:"0",textAlign:"center"}}>Let this website decide!</h1>
+                        <h1 style={{fontSize:"3vmax",margin:"0",textAlign:"center"}}>Don't know where to eat?</h1>
+                        <h1 style={{fontSize:"3vmax",margin:"0",textAlign:"center"}}>Let this website decide!</h1>
                         {/* button code :/ */}
-                        <div style={{color:"white",fontSize:"30px",fontWeight:"1000 ",borderRadius:"5px",display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:'red', minWidth:"130px",minHeight:"60px"}}>            
+                        <div style={{color:"white",fontSize:"2vmax",fontWeight:"1000 ",borderRadius:"5px",display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:'red', padding:"5px",paddingRight:"10px"}}>            
                             <motion.div
-                                whileHover={{ scale: 1.15 }}
+                                whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.8 }}
                                 onClick = {()=>{props.changePage("Form")}} 
                                 sx={{

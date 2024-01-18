@@ -46,7 +46,7 @@
   font-family: 'Poppins-Medium';
   src: local('Poppins-Medium'), url(./fonts/Poppins-Medium.ttf ) format('truetype');
 }
-h1,p {
+h1,p,option {
   font-family:poppins
 }
 .formPage{
@@ -197,9 +197,8 @@ h1,p {
 }
 .ratings{
   display:flex;
-  flex-direction: column;
-  gap:10px;
-  margin-top:8px;
+  align-items: center;
+  gap:5px;
 }
 .filterSortOpenContainer{
   display:flex;

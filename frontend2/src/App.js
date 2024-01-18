@@ -26,13 +26,23 @@ function App() {
   const [searchResults, setSearchResults] = useState(null);
   const [lat, setLat ] = useState(40.730610);
   const [long, setLong] = useState(-73.935242);
-  const [data,setData] = useState(null);
   const confettiRef = useRef();
   const updateDimensions = () => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
   }
   useEffect(() => {
+    //https://server.yelpin.xyz/
+    fetch("http://localhost:3001/message",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({latitude:lat,longitude:long})
+    })
+    .then((res) => res.json())
+    .then((data) => {setBusinessPictures(data.businesses)});
+
     if(locationPerm){
       setLocationPerm(false);
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -40,7 +50,6 @@ function App() {
         const longitude = position.coords.longitude;
         setLat(latitude);
         setLong(longitude);
-        console.log("latitude: " + latitude + " longitude: "+longitude);
         fetch("http://localhost:3001/message",{
           method: "POST",
           headers: {
@@ -50,43 +59,32 @@ function App() {
         })
         .then((res) => res.json())
         .then((data) => {setBusinessPictures(data.businesses)});
-      }
-      , ((err)=>{
-        switch(err.code) {
-          case err.PERMISSION_DENIED:
-            break;
-          }
-        })
-      );
-    }
-    if(data !== null){
-      fetch("http://localhost:3001/search",{
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then((res) => res.json())
-      .then((results) => {setSearchResults(results.restauraunts)});
+      });
     }
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
-  }, [data]);
-  
+  }, [locationPerm]);
   function changePage(page){
     setPage(page);
   }
   function setFormData(data,page){
-    if(data.tags.length>0){
-      setData(data);
-      changePage(page);
-    }
+    changePage(page);
+    setLat(data.latitude);
+    setLong(data.longitude);
+    fetch("http://localhost:3001/search",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((res) => res.json())
+    .then((results) => {setSearchResults(results.restauraunts);});
+      
   }
   function spawnConfetti(){
     confettiRef.current.getConfetti();
   }
-
   return (
     <div className="App">
       
@@ -95,6 +93,7 @@ function App() {
       <AppBar style={{height:"80px",width:"100%"}}color="primary" position="sticky">
         <Toolbar sx={style.toolBar}>
           <img onClick={()=>{changePage("FrontPage");setSearchResults(null)}}style={{height:"70%",cursor:"pointer"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
+          
         </Toolbar>
       </AppBar>
       {
@@ -140,23 +139,19 @@ function App() {
       <div style={{height:"100%",display:"flex",width:"100%",padding:"0",marginTop:"30px"}}>
         <InfiniteLooping > 
           {
-            businessPictures===null ? 
-            (()=>{staticPhotos.map((src)=>{
-              return(<img src={require(`${ src}`)} width={"100%"} height={"784px"} alt={src}></img>) 
-            })})
-          :
-          businessPictures.map((image)=>{
-            return(
-              <motion.div
-                whileHover={{ scale: 1.10 }}
-                whileTap={{ scale: 0.8 }}
-              >
-              <a href = {image.url}>
-                <img src={`${image.image_url}`} width={"225px"} height={"175px"} alt={image.name} style={{borderRadius: "5px",marginLeft:"12.5px",marginRight:"12.5px"}}/>
-              </a>
-              </motion.div>
-            ) 
-            })
+          businessPictures!==null && 
+            businessPictures.map((image)=>{
+              return(
+                <motion.div
+                  whileHover={{ scale: 1.10 }}
+                  whileTap={{ scale: 0.8 }}
+                >
+                <a href = {image.url}>
+                  <img src={`${image.image_url}`} width={"200vw"} height={"170vh"} alt={image.name} style={{borderRadius: "5px",marginLeft:"12.5px",marginRight:"12.5px"}}/>
+                </a>
+                </motion.div>
+              ) 
+              })
           }
         </InfiniteLooping>
       </div>

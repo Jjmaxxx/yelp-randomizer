@@ -16,7 +16,7 @@ function Result(props){
     useEffect(()=>{
         setTheRestauraunt(null);
         if(restaurants != null){
-            if(restaurants.length == 0){
+            if(restaurants.length === 0){
                 console.log('didnt find anythingm');
                 setFoundNone(true);
             }else{
@@ -122,7 +122,7 @@ function Result(props){
             : openFoundNone ? 
                 <div style={{display:"flex", textAlign:"center",flexDirection:'column',justifyContent:"center",alignItems:"center",height:props.windowheight}}>
                     <div>
-                        could not find anything :(
+                        could not find anything :( 
                     </div>
                     <div>
                         click on the icon in the top left to return.
@@ -130,6 +130,10 @@ function Result(props){
                     <div>
                         (is your search radius in the ocean or antarctica or something ?)
                     </div>
+                    <br/>
+                    <i>
+                        (is the place even open ?)
+                    </i>
                     
                 </div>
 

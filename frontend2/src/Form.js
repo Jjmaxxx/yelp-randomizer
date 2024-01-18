@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-import {FormControl, FormControlLabel, Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
+import {Rating, FormControlLabel, Select, Popover, MenuItem, Menu, Typography, TextField, Divider,CssBaseline,Checkbox, Slider } from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
+import {StarIcon, EmptyStarIcon}  from "./utils/Stars.js";
 import theme from './utils/theme.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState, useEffect } from 'react';
@@ -21,14 +22,11 @@ import LunchDiningIcon from '@mui/icons-material/LunchDining';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import IcecreamIcon from '@mui/icons-material/Icecream';
-import ShuffleIcon from '@mui/icons-material/Shuffle';
-import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
 import CakeIcon from '@mui/icons-material/Cake';
-import usePreventScrollOnFocus from './preventScroll.js';
 import { useMapEvents,MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
-let starRatings = ["./images/stars/0 star.png","./images/stars/1 star.png","./images/stars/2 star.png","./images/stars/3 star.png","./images/stars/4 star.png"];
+// let starRatings = ["./images/stars/0 star.png","./images/stars/1 star.png","./images/stars/2 star.png","./images/stars/3 star.png","./images/stars/4 star.png"];
 const prices = ["$","$$","$$$","$$$$"];
 
 function Form(props){
@@ -54,35 +52,33 @@ function Form(props){
         setLongitude(props.longitude);
     },[props.latitude,props.longitude]);
     const categoryMenuOpen = (event)=>{
-        setCategoryMenu(event.currentTarget);
+        setCategoryMenu(event.target);
     }
     const categoryMenuClose=(event)=>{
         setCategoryMenu(null);
     }
     const foodMenuOpen = (event)=>{
-        setFoodMenu(event.currentTarget);
+        setFoodMenu(event.target);
     }
     const foodMenuClose=(event)=>{
         setFoodMenu(null);
     }
     const openHelp = (event)=>{
-        setAnchorPop(event.target);
+        setAnchorPop(event.currentTarget);
     }
     const closeHelp = ()=>{
         setAnchorPop(null);
     }
-    const handleRatings = (event)=>{
-        setRatings(event.target.value);
-    }
     const handleSort = (event)=>{
+        //console.log(event.target.value);
         switch(event.target.value){
-            case 2:
+            case "2":
                 setSortBy("rating")
                 break;
-            case 3:
+            case "3":
                 setSortBy("review_count")
                 break;
-            case 4:
+            case "4":
                 setSortBy("distance")
                 break;
             default:
@@ -97,7 +93,7 @@ function Form(props){
         }
     }
     const inputTag = (event) =>{
-        console.log(event);
+        //console.log(event);
         if(event.key === "Enter"){
             addTag(event.target.value);
             setInputText("");
@@ -111,7 +107,7 @@ function Form(props){
         }
     }
     const removeTag = (tag)=>{
-        console.log(tag);
+        //console.log(tag);
         let removeIndex = tags.indexOf(tag);
         let listOfTags = [...tags];
         listOfTags.splice(removeIndex,1);
@@ -178,9 +174,14 @@ function Form(props){
                             anchorEl={categoryMenu}
                             open={categoryOpen}
                             onClose={categoryMenuClose}
-                            onMouseLeave={categoryMenuClose}
-                            MenuListProps={{ onMouseLeave: categoryMenuClose}}
-                            onFocus={usePreventScrollOnFocus()}
+                            MenuListProps={{ onMouseLeave: ()=>{
+                                //disabled for mobile
+                                if(props.windowwidth > 768){
+                                    categoryMenuClose()
+                                }
+                            }}}
+                            disableRestoreFocus={true}
+                            // onFocus={usePreventScrollOnFocus()}
                         >
                             <div className = "categoryMenu" onClick={categoryMenuClose} style={{width:"280px"}}>
                                 <div className = "categoryColumn">
@@ -245,10 +246,15 @@ function Form(props){
                             anchorEl={foodMenu}
                             open={foodOpen}
                             onClose={foodMenuClose}
-                            onMouseLeave={foodMenuClose}
-                            MenuListProps={{ onMouseLeave: foodMenuClose}}
-                            onFocus={usePreventScrollOnFocus()}
-                        >
+                            MenuListProps={{ onMouseLeave: ()=>{
+                                //disabled for mobile
+                                if(props.windowwidth > 768){
+                                    foodMenuClose()
+                                }
+                            }}}
+                            getContentAnchorEl={null}
+                            disableRestoreFocus={true}
+>
                             <div className = "categoryMenu" onClick={foodMenuClose} style={{width:"280px"}}>
                                 <div className = "categoryColumn">
                                     <MenuItem onClick={()=>{addTag("Noodles")}}>
@@ -338,14 +344,12 @@ function Form(props){
                             >
                                 <HelpOutlineIcon 
                                     style={{marginLeft:'5px',marginTop:"7px"}} 
-                                    
                                 />
                             </div>
                             <Popover
                                 sx={{
                                     pointerEvents: 'none',
                                 }}
-                                onFocus={usePreventScrollOnFocus()}
                                 color="secondary"
                                 open={openPop}
                                 anchorEl={anchorPop}
@@ -384,7 +388,7 @@ function Form(props){
                         />
                     </div>
                     {
-                        props.windowwidth> 852 &&
+                        props.windowwidth > 852 &&
                             <Divider 
                                 orientation="vertical"
                                 sx={{ height:"300px",borderRightWidth: 3, marginLeft:"25px",marginRight:"25px"}} 
@@ -410,7 +414,22 @@ function Form(props){
                             <div className='ratingsContainer'>
                                 <p style={{fontSize:'20px',marginRight:"5px"}}>Ratings:</p>
                                 <div className="ratings">
-                                    <FormControl fullWidth={true}>
+                                    <Rating
+                                        onChange={(event,newVal)=>{setRatings(newVal)}}
+                                        size="large"
+                                        precision={0.5}
+                                        emptyIcon={<EmptyStarIcon  />}
+                                        icon={<StarIcon />}
+                                        sx={{
+                                            "& .MuiRating-icon": {
+                                                width: '2rem',
+                                            },
+                                            display:"flex",
+                                            gap:"3px"
+                                          }}
+                                    />
+                                    <p>& up</p>
+                                    {/* <FormControl fullWidth={true}>
                                     <Select
                                         defaultValue={0}
                                         sx={{ boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
@@ -428,7 +447,7 @@ function Form(props){
                                             )
                                         })} 
                                     </Select>
-                                    </FormControl>
+                                    </FormControl> */}
                                 </div>
                                 
                             </div>
@@ -438,6 +457,7 @@ function Form(props){
                                         Sort By:
                                     </div>
                                     <Select
+                                        native
                                         defaultValue={1}
                                         color="secondary"
                                         InputLabelProps={{
@@ -445,12 +465,11 @@ function Form(props){
                                         }}
                                         onChange={handleSort}
                                         style={{fontSize:"18px"}}
-                                        // MenuProps={{onFocus:usePreventScrollOnFocus()}}
                                     >
-                                        <MenuItem value={1}>Best Match</MenuItem>
-                                        <MenuItem value={2}>Ratings</MenuItem>
-                                        <MenuItem value={3}>Review Count</MenuItem>
-                                        <MenuItem value={4}>Distance</MenuItem>
+                                        <option value={1}>Best Match</option>
+                                        <option value={2}>Ratings</option>
+                                        <option value={3}>Review Count</option>
+                                        <option value={4}>Distance</option>
                                     </Select>
                                 </div>
                                 <FormControlLabel
