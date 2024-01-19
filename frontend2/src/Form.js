@@ -152,7 +152,10 @@ function Form(props){
             <div className="formPage">
                 <div className="formCategories">
                     <div className="formCategoriesTags">
-                        <p style={{fontSize:"30px",marginRight:"10px"}}>Tags:</p>
+                        {tags.length<1 &&
+                            <p style={{fontSize:"28.5px",marginRight:"10px"}}>Tags:</p>
+                        }
+                        
                         <div className="formTags">
                             {
                                 tags.map((tag)=>{
@@ -166,7 +169,15 @@ function Form(props){
                     <Divider style={{marginBottom:"5px"}}/>
                     <div className="formCategoriesSelections">
                         
-                        <div className="category" onClick = {categoryMenuOpen }onMouseOver={categoryMenuOpen}>
+                        <div className="category"
+                         onClick = {categoryMenuOpen}
+                         onMouseOver={(e)=>{
+                            if(props.windowwidth > 768){
+                                categoryMenuOpen(e);
+                            }
+                         }}
+                         
+                         >
                             Cuisines
                             <KeyboardArrowDownIcon/>
                         </div>
@@ -177,7 +188,7 @@ function Form(props){
                             MenuListProps={{ onMouseLeave: ()=>{
                                 //disabled for mobile
                                 if(props.windowwidth > 768){
-                                    categoryMenuClose()
+                                    categoryMenuClose();
                                 }
                             }}}
                             disableRestoreFocus={true}
@@ -238,7 +249,14 @@ function Form(props){
                                 </div>
                             </div>
                         </Menu>
-                        <div className="category" onClick = {foodMenuOpen }onMouseOver={foodMenuOpen}>
+                        <div className="category"
+                         onClick = {foodMenuOpen }
+                         onMouseOver={(e)=>{
+                            if(props.windowwidth > 768){
+                                foodMenuOpen(e);
+                            }
+                         }}
+                         >
                             Foods
                             <KeyboardArrowDownIcon/>
                         </div>
@@ -252,7 +270,6 @@ function Form(props){
                                     foodMenuClose()
                                 }
                             }}}
-                            getContentAnchorEl={null}
                             disableRestoreFocus={true}
 >
                             <div className = "categoryMenu" onClick={foodMenuClose} style={{width:"280px"}}>
@@ -349,14 +366,17 @@ function Form(props){
                             <Popover
                                 sx={{
                                     pointerEvents: 'none',
+                                    display:"flex",
+                                    justifyContent:"center",
+                                    alignItems:"center",
+                                    textAlign:"center",
                                 }}
                                 color="secondary"
                                 open={openPop}
                                 anchorEl={anchorPop}
                                 onClose={closeHelp}
-                                disableRestoreFocus
                             >
-                                Click to Move the Circle. Hold and Click to Move the Map.
+                                <p>Click to Move the Circle. <br/>Hold and Click to Move the Map.</p>
                             </Popover>
                         </div>
                         {/* https://react-leaflet.js.org/docs/start-setup/ */}
@@ -412,20 +432,19 @@ function Form(props){
                                 }
                             </div>
                             <div className='ratingsContainer'>
-                                <p style={{fontSize:'20px',marginRight:"5px"}}>Ratings:</p>
+                                <p style={{fontSize:'20px',marginRight:"15px"}}>Ratings:</p>
                                 <div className="ratings">
                                     <Rating
                                         onChange={(event,newVal)=>{setRatings(newVal)}}
-                                        size="large"
-                                        precision={0.5}
                                         emptyIcon={<EmptyStarIcon  />}
                                         icon={<StarIcon />}
                                         sx={{
                                             "& .MuiRating-icon": {
-                                                width: '2rem',
+                                                width: '2.2rem',
+
                                             },
-                                            display:"flex",
-                                            gap:"3px"
+                                            // display:"flex",
+                                            // gap:"3px"
                                           }}
                                     />
                                     <p>& up</p>
@@ -460,9 +479,6 @@ function Form(props){
                                         native
                                         defaultValue={1}
                                         color="secondary"
-                                        InputLabelProps={{
-                                            style: { color: 'red' },
-                                        }}
                                         onChange={handleSort}
                                         style={{fontSize:"18px"}}
                                     >
@@ -508,7 +524,8 @@ function Form(props){
                                 longitude:longitude
                             },
                             "Result"
-                            )
+                            );
+                            
                         }} 
                         sx={{
                             paddingLeft: "20px",

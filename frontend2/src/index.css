@@ -25,6 +25,9 @@ code {
   width: max-content;
   animation: slideAnimation linear infinite;
 }
-body {
+html,body {
   overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+  transform: translate3d(0,0,0);
 }

@@ -7,13 +7,14 @@ import { useEffect, useState } from 'react';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import Zoom from '@mui/material/Zoom';
 function Result(props){
     const restaurants = props.results;
     const [resultsOpen, setResultsOpen] = useState(false);
     const [theRestauraunt, setTheRestauraunt] = useState(null);
     const [openFoundNone, setFoundNone] = useState(false);
     useEffect(()=>{
+        document.body.scrollTo({ top: 0 });
+        console.log(window);
         setTheRestauraunt(null);
         if(restaurants != null){
             if(restaurants.length === 0){

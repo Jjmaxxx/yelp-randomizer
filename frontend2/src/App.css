@@ -46,6 +46,10 @@
   font-family: 'Poppins-Medium';
   src: local('Poppins-Medium'), url(./fonts/Poppins-Medium.ttf ) format('truetype');
 }
+@font-face {
+  font-family:"Roboto-Regular";
+  src:local("Roboto-Regular"),url(./fonts/roboto/Roboto-Regular.ttf) format('truetype');
+}
 h1,p,option {
   font-family:poppins
 }
@@ -70,8 +74,8 @@ h1,p,option {
 .formTags{
   display:flex;
   justify-content: space-around;
-  gap:10px;
-  align-items:center;
+  gap:5px;
+  flex-wrap:wrap;
 }
 .tag{
   font-size: 25px;
@@ -229,6 +233,10 @@ body{
 .resultsTitle{
   font-size:40px;
   margin:0;
+  text-align:center;
+  display:'flex';
+  justify-content: center;
+  align-items: center;
 }
 .resultsData{
   display:flex;

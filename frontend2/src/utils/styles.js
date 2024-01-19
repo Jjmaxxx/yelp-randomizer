@@ -1,7 +1,8 @@
 import '../App.css';
 const styles = {
     toolBar:{
-        display:"flex"
+        display:"flex",
+        width:"100%"
     },
 }
 export default styles;

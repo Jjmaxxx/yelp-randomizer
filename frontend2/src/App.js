@@ -6,7 +6,7 @@ import { useState, useEffect,useRef } from 'react';
 import theme from './utils/theme.js';
 import { ThemeProvider } from "@mui/material/styles";
 import "./App.css";
-import { AppBar, Toolbar, Dialog } from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import styles from './utils/styles.js';
 import InfiniteLooping from "./InfiniteLooping.js";
@@ -14,7 +14,6 @@ import Confetti from './Confetti.js';
 
 import { motion } from "framer-motion";
 
-let staticPhotos = ["./images/stockphoto1.jpg","./images/stockphoto2.jpg","./images/stockphoto3.jpg","./images/stockphoto4.jpg","./images/stockphoto5.png"];
 
 function App() {
   const style = styles;
@@ -33,7 +32,7 @@ function App() {
   }
   useEffect(() => {
     //https://server.yelpin.xyz/
-    fetch("http://localhost:3001/message",{
+    fetch("https://server.yelpin.xyz/message",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -63,7 +62,7 @@ function App() {
     }
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
-  }, [locationPerm]);
+  }, [locationPerm,lat,long]);
   function changePage(page){
     setPage(page);
   }
