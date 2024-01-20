@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+let allRestaurants = [];
 function Result(props){
     const restaurants = props.results;
     const [resultsOpen, setResultsOpen] = useState(false);
@@ -14,7 +15,6 @@ function Result(props){
     const [openFoundNone, setFoundNone] = useState(false);
     useEffect(()=>{
         document.body.scrollTo({ top: 0 });
-        console.log(window);
         setTheRestauraunt(null);
         if(restaurants != null){
             if(restaurants.length === 0){
@@ -27,7 +27,12 @@ function Result(props){
     },[restaurants]);
     const pickRestauraunt = () =>{
         props.spawnConfetti();
-        setTheRestauraunt(restaurants[Math.floor(Math.random() * restaurants.length)]);
+        if(allRestaurants.length<1){
+            allRestaurants = [...props.results];
+        }
+        let randomRestaurant = allRestaurants[Math.floor(Math.random() * allRestaurants.length)];
+        allRestaurants.splice(allRestaurants.indexOf(randomRestaurant),1);
+        setTheRestauraunt(randomRestaurant);
     }
     const handleResultsClose = ()=>{
         setResultsOpen(false);
@@ -65,7 +70,7 @@ function Result(props){
                                     )
                                 })
                             }
-                            • {theRestauraunt.price} • {theRestauraunt.rating} ({theRestauraunt.review_count} reviews) • 
+                            • {theRestauraunt.price} • {theRestauraunt.rating}★ ({theRestauraunt.review_count} reviews) • 
                             <a href={`https://www.google.com/maps/dir/?api=1&origin=${props.latitude},${props.longitude}&destination=${theRestauraunt.coordinates.latitude},${theRestauraunt.coordinates.longitude}`}>{Math.round((theRestauraunt.distance/1609)*10)/10} mi away</a>
                         </div>
                         <div className="optionButtons">
@@ -103,11 +108,16 @@ function Result(props){
                                 return(
                                     <div> 
                                         <ListItem className="listItemStyle">
-                                            <ListItemButton className ="listItemName" disableRipple >
+                                            <ListItemButton
+                                             onClick = {(event)=>{
+                                                window.location.href=restaurant.url;
+                                             }}
+                                             className ="listItemName" 
+                                             disableRipple >
                                                 {restaurant.name}
                                             </ListItemButton>
                                             <div>
-                                                {restaurant.price} • {restaurant.rating} ({restaurant.review_count} reviews) •
+                                                {restaurant.price} • {restaurant.rating}★ ({restaurant.review_count} reviews) •
                                                 <a href={`https://www.google.com/maps/dir/?api=1&origin=${props.latitude},${props.longitude}&destination=${restaurant.coordinates.latitude},${restaurant.coordinates.longitude}`}> {Math.round((restaurant.distance/1609)*10)/10} mi away</a>
                                             </div>
                                         </ListItem>

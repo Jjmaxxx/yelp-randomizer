@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { useEffect } from "react";
 import './App.css';
 
+let instances = [1,2];
 export default function InfiniteLooping(props) {
-  const [instances, setInstances] = useState([1, 2]);
   // useEffect(() => {
   //   console.log(props.children);
   // }, [props.children]);

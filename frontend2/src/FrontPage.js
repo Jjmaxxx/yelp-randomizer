@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { Card, CardActions, Button } from "@mui/material";
+import { Card} from "@mui/material";
 import { motion } from "framer-motion";
 function FrontPage(props){
     // const [images,setImages] = useState([]);
-    useEffect(()=>{
-        console.log("front page")
-    },[]);
+    // useEffect(()=>{
+    //     // console.log("front page")
+    // },[]);
     return(
         <div className='Home' style={{width:props.windowwidth,height:props.windowheight, minHeight:"400px"}}>
             <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>

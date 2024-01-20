@@ -11,7 +11,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import styles from './utils/styles.js';
 import InfiniteLooping from "./InfiniteLooping.js";
 import Confetti from './Confetti.js';
-
+import photos from "./utils/nyphotos.js";
 import { motion } from "framer-motion";
 
 
@@ -32,16 +32,9 @@ function App() {
   }
   useEffect(() => {
     //https://server.yelpin.xyz/
-    fetch("https://server.yelpin.xyz/message",{
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({latitude:lat,longitude:long})
-    })
-    .then((res) => res.json())
-    .then((data) => {setBusinessPictures(data.businesses)});
-
+    if(businessPictures == null){
+      setBusinessPictures(photos);
+    }
     if(locationPerm){
       setLocationPerm(false);
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -49,20 +42,20 @@ function App() {
         const longitude = position.coords.longitude;
         setLat(latitude);
         setLong(longitude);
-        fetch("http://localhost:3001/message",{
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({latitude:latitude,longitude:longitude})
-        })
-        .then((res) => res.json())
-        .then((data) => {setBusinessPictures(data.businesses)});
+        // fetch("http://localhost:3001/message",{
+        //   method: "POST",
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({latitude:lat,longitude:long})
+        // })
+        // .then((res) => res.json())
+        // .then((data) => {setBusinessPictures(data.businesses);console.log(data.businesses)});
       });
     }
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
-  }, [locationPerm,lat,long]);
+  }, [locationPerm,lat,long,businessPictures]);
   function changePage(page){
     setPage(page);
   }
@@ -78,7 +71,12 @@ function App() {
       body: JSON.stringify(data)
     })
     .then((res) => res.json())
-    .then((results) => {setSearchResults(results.restauraunts);});
+    .then((results) => {
+      setSearchResults(results.restauraunts);
+      if(results.restauraunts!= null){
+        setBusinessPictures(results.restauraunts);
+      }
+    }).catch(error => {alert(error)});
       
   }
   function spawnConfetti(){
@@ -91,7 +89,7 @@ function App() {
       <CssBaseline/>
       <AppBar style={{height:"80px",width:"100%"}}color="primary" position="sticky">
         <Toolbar sx={style.toolBar}>
-          <img onClick={()=>{changePage("FrontPage");setSearchResults(null)}}style={{height:"70%",cursor:"pointer"}}src={require("./images/yelpin.png")} alt={"yelpin"}/>
+          <img onClick={()=>{changePage("FrontPage");setSearchResults(null)}}style={{height:"48%",cursor:"pointer"}}src={require("./images/yelpin2.png")} alt={"yelpin"}/>
           
         </Toolbar>
       </AppBar>

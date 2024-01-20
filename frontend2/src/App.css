@@ -48,7 +48,7 @@
 }
 @font-face {
   font-family:"Roboto-Regular";
-  src:local("Roboto-Regular"),url(./fonts/roboto/Roboto-Regular.ttf) format('truetype');
+  src:local("Roboto-Regular"),url(./fonts/Roboto-Regular.ttf) format('truetype');
 }
 h1,p,option {
   font-family:poppins

@@ -1,0 +1,7 @@
+ideas
+
+make mobile ui not garbage
+mobile not able to click on cuisines or foods bc they dont have a mouse hover feature
+maybe like parody the yelp logo
+
+fix that stupid problem where the screen jumps if the website is too vertical
