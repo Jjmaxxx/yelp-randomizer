@@ -31,7 +31,7 @@ function App() {
     setHeight(window.innerHeight);
   }
   useEffect(() => {
-    //https://server.yelpin.xyz/
+    
     if(businessPictures == null){
       setBusinessPictures(photos);
     }
@@ -63,7 +63,8 @@ function App() {
     changePage(page);
     setLat(data.latitude);
     setLong(data.longitude);
-    fetch("http://localhost:3001/search",{
+    //https://server.yelpin.xyz/
+    fetch("https://server.yelpin.xyz/search",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
